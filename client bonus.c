@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   client bonus.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gule-bat <gule-bat@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 15:23:44 by gule-bat          #+#    #+#             */
-/*   Updated: 2025/05/06 21:13:27 by gule-bat         ###   ########.fr       */
+/*   Updated: 2025/05/06 21:28:31 by gule-bat         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	receiver(int signum, siginfo_t *info, void *context)
 	ft_putstr_fd("Message received by server (pid = ", 1);
 	ft_putnbr_fd(info->si_pid, 1);
 	ft_putstr_fd(")\n", 1);
-	exit(EXIT_SUCCESS);
+	// exit(EXIT_SUCCESS);
 }
 
 int	ft_isdigit_check(char *str)
@@ -49,7 +49,7 @@ int	ft_isdigit_check(char *str)
 	return (1);
 }
 
-void	str_to_bit(char *str, pid_t pid)
+int	str_to_bit(char *str, pid_t pid)
 {
 	unsigned int		i;
 	int j;
@@ -64,30 +64,25 @@ void	str_to_bit(char *str, pid_t pid)
 		while (i--)
 		{
 			if (c >> i & 1)
-			{
+			{	
 				if (kill(pid, SIGUSR1) == -1)
-				{
-					ft_putstr_fd("Error PID", 2);
-					return ;
-				}
+					return (ft_putstr_fd("Error PID", 2), 0);
 			}
 			else
 			{
 				if (kill(pid, SIGUSR2) == -1)
-				{
-					ft_putstr_fd("Error PID", 2);
-					return ;
-				}
+					return (ft_putstr_fd("Error PID", 2), 0);
 			}
-			usleep(600);
+			pause();
 		}
 	}
 	i = 8;
 	while (i--)
 	{
-		usleep(600);
 		kill(pid, SIGUSR2);
+		pause();
 	}
+	exit(EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv)
