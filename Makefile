@@ -6,7 +6,7 @@
 #    By: gule-bat <gule-bat@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/07 15:02:03 by gule-bat          #+#    #+#              #
-#    Updated: 2025/05/02 14:27:48 by gule-bat         ###   ########.fr        #
+#    Updated: 2025/05/06 15:22:59 by gule-bat         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,26 +24,30 @@ VOID =  \033[2J
 #\033[2J 
 #end
 
-NAME = pipex
+NAME = client
+NAME2 = server
 
-SRCS =  srcs/else.c		srcs/main.c		srcs/parsing.c		srcs/pipes.c 	srcs/innout.c
+SRCS = client.c
+SRCS2 = server.c 
 
 INCLUDES = -I ./includes/
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3 -o $(NAME) $(INCLUDES)
 RM = rm -f
-OBJS = ($(SRCS).c )
+OBJS = $(SRCS:.c=.o)
+OBJS2 = $(SRCS2:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS)
-	@echo "$(MAGENTA) Compilation de $(YELLOW)PIPEX$(RESET) en cours ... $(RESET)"	
+$(NAME) $(NAME2): $(OBJS)
+	@echo "$(MAGENTA) Compilation de $(YELLOW)MINITALK$(RESET) en cours ... $(RESET)"	
 	@$(MAKE) -C ./libft
 	@$(MAKE) tabfast
 	@cp ./libft/libft.a .
 	@cc -Wall -Wextra -Werror $(SRCS) libft.a -g3 -o $(NAME)
-	@echo "$(GREEN)PIPEX $(NAME) CRÉÉ$(RESET)"
+	@cc -Wall -Wextra -Werror $(SRCS2) libft.a -g3 -o $(NAME)
+	@echo "$(GREEN)MINITALK $(NAME) CRÉÉ$(RESET)"
 	@sleep 0.1
 
 
@@ -96,14 +100,17 @@ tabfast:
 
 clean:
 	@$(RM) $(OBJS)
+	@$(RM) $(OBJS2)
 	@$(RM) libft.a
+	@$(MAKE) clean -C ./libft
+	@$(MAKE) tabfast
 	@echo "$(MAGENTA) Archive en supression ... \n $(GREEN)$(RESET)"
-	@echo "$(GREEN)Pipex correctement effacé.$(RESET)"
+	@echo "$(GREEN)MINITALK correctement effacé.$(RESET)"
 
 
 fclean: clean
 	@$(RM) $(NAME)
-	@echo "$(GREEN)Minnitalk, $(NAME) et son stuff,\n correctement effacés.$(RESET)"
+	@echo "$(GREEN)Minitalk, $(NAME) et son stuff,\n correctement effacés.$(RESET)"
 
 re: fclean all
 
